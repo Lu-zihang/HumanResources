@@ -85,7 +85,33 @@ forge build
 ```bash
 forge test -vv
 ```
+### Example console
+```
+[⠊] Compiling...
+[⠘] Compiling 37 files with Solc 0.8.26
+[⠃] Solc 0.8.26 finished in 1.71s
+Compiler run successful!
 
+Ran 15 tests for test/HumanResources.t.sol:HumanResourcesTest
+[PASS] testActiveEmployeeCount() (gas: 166939)
+[PASS] testFailedWithdrawals() (gas: 85805)
+[PASS] testFuzz_RegisterSalary(uint256) (runs: 256, μ: 87968, ~: 87968)
+[PASS] testFuzz_TimeBasedSalary(uint256) (runs: 256, μ: 89344, ~: 89344)
+[PASS] testGetActiveEmployeeCount() (gas: 170212)
+[PASS] testGetEmployeeInfoActive() (gas: 89594)
+[PASS] testGetEmployeeInfoNonExistent() (gas: 19418)
+[PASS] testGetEmployeeInfoTerminated() (gas: 94336)
+[PASS] testGetHrManager() (gas: 11064)
+[PASS] testPauseFunctionality() (gas: 112579)
+[PASS] testRegisterEmployee() (gas: 92055)
+[PASS] testSalaryCalculation() (gas: 91967)
+[PASS] testSwitchCurrency() (gas: 377757)
+[PASS] testTerminateEmployee() (gas: 92756)
+[PASS] testWithdrawSalaryInUSDC() (gas: 140618)
+Suite result: ok. 15 passed; 0 failed; 0 skipped; finished in 1.15s (152.82ms CPU time)
+
+Ran 1 test suite in 1.17s (1.15s CPU time): 15 tests passed, 0 failed, 0 skipped (15 total tests)
+```
 ### Run Specific Test
 
 ```bash
