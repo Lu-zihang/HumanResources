@@ -265,7 +265,72 @@ contract HumanResourcesTest is Test {
         vm.prank(employee1);
         hr.switchCurrency(); // Should work now
     }
-    
+
+    /// @notice Test getHrManager function
+    function testGetHrManager() public view {
+        assertEq(hr.getHrManager(), hrManager, "HR manager address mismatch");
+    }
+
+    /// @notice Test getActiveEmployeeCount function
+    function testGetActiveEmployeeCount() public {
+        // Initial count should be 0
+        assertEq(hr.getActiveEmployeeCount(), 0, "Initial employee count should be 0");
+
+        // Register one employee
+        vm.prank(hrManager);
+        hr.registerEmployee(employee1, WEEKLY_SALARY);
+        assertEq(hr.getActiveEmployeeCount(), 1, "Count should be 1 after registration");
+
+        // Register another employee
+        vm.prank(hrManager);
+        hr.registerEmployee(employee2, WEEKLY_SALARY);
+        assertEq(hr.getActiveEmployeeCount(), 2, "Count should be 2 after second registration");
+
+        // Terminate one employee
+        vm.prank(hrManager);
+        hr.terminateEmployee(employee1);
+        assertEq(hr.getActiveEmployeeCount(), 1, "Count should be 1 after termination");
+    }
+
+    /// @notice Test getEmployeeInfo function for non-existent employee
+    function testGetEmployeeInfoNonExistent() public view {
+        // Test non-existent employee
+        (uint256 salary, uint256 employed, uint256 terminated) = hr.getEmployeeInfo(employee1);
+        assertEq(salary, 0, "Non-existent employee salary should be 0");
+        assertEq(employed, 0, "Non-existent employee employment time should be 0");
+        assertEq(terminated, 0, "Non-existent employee termination time should be 0");
+    }
+
+    /// @notice Test getEmployeeInfo function for active employee
+    function testGetEmployeeInfoActive() public {
+        // Register employee
+        vm.prank(hrManager);
+        hr.registerEmployee(employee1, WEEKLY_SALARY);
+        
+        // Check active employee info
+        (uint256 salary, uint256 employed, uint256 terminated) = hr.getEmployeeInfo(employee1);
+        assertEq(salary, WEEKLY_SALARY, "Active employee salary mismatch");
+        assertEq(employed, block.timestamp, "Active employee employment time mismatch");
+        assertEq(terminated, 0, "Active employee should not have termination time");
+    }
+
+    /// @notice Test getEmployeeInfo function for terminated employee
+    function testGetEmployeeInfoTerminated() public {
+        // Register and then terminate employee
+        vm.startPrank(hrManager);
+        hr.registerEmployee(employee1, WEEKLY_SALARY);
+        skip(1 days); // Add some time gap
+        hr.terminateEmployee(employee1);
+        vm.stopPrank();
+        
+        // Check terminated employee info
+        (uint256 salary, uint256 employed, uint256 terminated) = hr.getEmployeeInfo(employee1);
+        assertEq(salary, WEEKLY_SALARY, "Terminated employee salary should remain unchanged");
+        assertTrue(employed > 0, "Terminated employee should have employment time");
+        assertTrue(terminated > employed, "Termination time should be after employment time");
+        assertEq(terminated, block.timestamp, "Termination time should match block timestamp");
+    }
+
     /// @notice Get ETH/USD price from Chainlink
     function getEthUsdPrice() internal view returns (int256) {
         (, int256 price,,,) = AggregatorV3Interface(CHAINLINK_ETH_USD_ADDRESS).latestRoundData();

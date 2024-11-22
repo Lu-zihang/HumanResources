@@ -179,7 +179,6 @@ contract HumanResources is IHumanResources, ReentrancyGuard, Pausable {
         uint256 salary = calculateSalary(msg.sender);
         if (salary == 0) return;
 
-        uint256 minAmountOut = salary * 98 / 100;
         if (employees[msg.sender].isEthPreferred) {
             // Get ETH/USD price
             (, int256 price,,, ) = AggregatorV3Interface(CHAINLINK_ETH_USD_ADDRESS).latestRoundData();
@@ -194,13 +193,13 @@ contract HumanResources is IHumanResources, ReentrancyGuard, Pausable {
                 recipient: address(this),
                 deadline: block.timestamp + 60,
                 amountIn: salary,
+                // Slipple Protectt
                 amountOutMinimum: ethAmount * 98 / 100, 
                 sqrtPriceLimitX96: 0
             });
             uint256 amountOut = ISwapRouter(UNISWAP_ROUTER_ADDRESS).exactInputSingle(params);
-            require(amountOut >= minAmountOut, "Insufficient withdrawable amount");
 
-            // Withdraw WETH and send to employee
+            // Withdlraw WETH and send to employee
             IWETH(WETH_ADDRESS).withdraw(amountOut);
             (bool success, ) = payable(msg.sender).call{value: amountOut}('');
             require(success, "Withdraw failed");
@@ -219,7 +218,6 @@ contract HumanResources is IHumanResources, ReentrancyGuard, Pausable {
         uint256 salary = calculateSalary(msg.sender);
         if (salary == 0) return;
 
-        uint256 minAmountOut = salary * 98 / 100;
         if (employees[msg.sender].isEthPreferred) {
             // Get ETH/USD price
             (, int256 price,,,) = AggregatorV3Interface(CHAINLINK_ETH_USD_ADDRESS).latestRoundData();
@@ -239,7 +237,6 @@ contract HumanResources is IHumanResources, ReentrancyGuard, Pausable {
             });
 
             uint256 amountOut = ISwapRouter(UNISWAP_ROUTER_ADDRESS).exactInputSingle(params);
-            require(amountOut >= minAmountOut, "Insufficient withdrawable amount");
 
             // Withdraw WETH and send to employee
             IWETH(WETH_ADDRESS).withdraw(amountOut);
@@ -255,7 +252,7 @@ contract HumanResources is IHumanResources, ReentrancyGuard, Pausable {
         }
 
         employees[msg.sender].isEthPreferred = !employees[msg.sender].isEthPreferred;
-        
+
         emit CurrencySwitched(msg.sender, employees[msg.sender].isEthPreferred);
     }
 
@@ -332,10 +329,9 @@ contract HumanResources is IHumanResources, ReentrancyGuard, Pausable {
         pure
         returns (uint256)
     {
-        if (tokenDecimals == 6) { // 如果是 USDC (6位小数)
-            return tokenAmount * 1e12; // 直接乘以 1e12 转换为 18 位小数
+        if (tokenDecimals == 6) {
+            return tokenAmount * 1e12;
         }
-        // 其他情况使用通用转换
         return tokenAmountToDecimals(tokenAmount, tokenDecimals, 18);
     }
 
@@ -348,10 +344,9 @@ contract HumanResources is IHumanResources, ReentrancyGuard, Pausable {
         pure
         returns (uint256)
     {
-        if (tokenDecimals == 18) { // 如果是 WETH (18位小数)
-            return tokenAmount / 1e12; // 直接除以 1e12 转换为 6 位小数
+        if (tokenDecimals == 18) {
+            return tokenAmount / 1e12;
         }
-        // 其他情况使用通用转换
         return tokenAmountToDecimals(tokenAmount, tokenDecimals, 6);
     }
 
