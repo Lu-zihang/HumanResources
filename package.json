@@ -1,0 +1,11 @@
+{
+  "name": "humanResources",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Kuwatakushi <huang3303147337@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@uniswap/v3-core": "^1.0.1",
+    "@uniswap/v3-periphery": "^1.4.4"
+  }
+}

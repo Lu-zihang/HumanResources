@@ -1,0 +1,33 @@
+Arguments: 
+  /usr/local/bin/node /usr/share/yarn/bin/yarn.js add @uniswap/v3-core @uniswap/v3-periphery
+
+PATH: 
+  /home/luzihang/.cargo/bin:/home/luzihang/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/luzihang/.foundry/bin:/home/luzihang/.foundry/bin:/home/luzihang/.foundry/bin:/usr/local/go/bin:/home/luzihang/.foundry/bin:/home/luzihang/.foundry/bin:/home/luzihang/.foundry/bin:/usr/local/go/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  21.6.2
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: getaddrinfo EAI_AGAIN registry.yarnpkg.com
+      at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:dns:118:26)
+
+npm manifest: 
+  {
+    "name": "humanResources",
+    "version": "1.0.0",
+    "main": "index.js",
+    "author": "Kuwatakushi <huang3303147337@gmail.com>",
+    "license": "MIT"
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
