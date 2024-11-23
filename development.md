@@ -13,8 +13,8 @@ This guide will help you set up the development environment and run the HumanRes
 ### 1. Clone the Project
 
 ```bash
-git clone <your-repository-url>
-cd <repository-name>
+git clone https://github.com/Lu-zihang/HumanResources.git
+cd HumanResources
 ```
 
 ### 2. Install Foundry Dependencies
